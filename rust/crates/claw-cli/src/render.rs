@@ -90,7 +90,7 @@ impl Spinner {
             MoveToColumn(0),
             Clear(ClearType::CurrentLine),
             SetForegroundColor(theme.spinner_done),
-            Print(format!("✔ {label}\n")),
+            Print(format!("OK {label}\n")),
             ResetColor
         )?;
         out.flush()
@@ -108,7 +108,7 @@ impl Spinner {
             MoveToColumn(0),
             Clear(ClearType::CurrentLine),
             SetForegroundColor(theme.spinner_failed),
-            Print(format!("✘ {label}\n")),
+            Print(format!("XX {label}\n")),
             ResetColor
         )?;
         out.flush()
@@ -436,7 +436,7 @@ impl TerminalRenderer {
 
     fn start_quote(&self, state: &mut RenderState, output: &mut String) {
         state.quote += 1;
-        let _ = write!(output, "{}", "│ ".with(self.color_theme.quote));
+        let _ = write!(output, "{}", "> ".with(self.color_theme.quote));
     }
 
     fn start_item(state: &mut RenderState, output: &mut String) {
@@ -449,7 +449,7 @@ impl TerminalRenderer {
                 *next_index += 1;
                 format!("{value}. ")
             }
-            _ => "• ".to_string(),
+            _ => "- ".to_string(),
         };
         output.push_str(&marker);
     }
@@ -463,7 +463,7 @@ impl TerminalRenderer {
         let _ = writeln!(
             output,
             "{}",
-            format!("╭─ {label}")
+            format!("+-- {label}")
                 .bold()
                 .with(self.color_theme.code_block_border)
         );
@@ -474,7 +474,7 @@ impl TerminalRenderer {
         let _ = write!(
             output,
             "{}",
-            "╰─".bold().with(self.color_theme.code_block_border)
+            "+--".bold().with(self.color_theme.code_block_border)
         );
         output.push_str("\n\n");
     }
@@ -516,12 +516,12 @@ impl TerminalRenderer {
             })
             .collect::<Vec<_>>();
 
-        let border = format!("{}", "│".with(self.color_theme.table_border));
+        let border = format!("{}", "|".with(self.color_theme.table_border));
         let separator = widths
             .iter()
-            .map(|width| "─".repeat(*width + 2))
+            .map(|width| "-".repeat(*width + 2))
             .collect::<Vec<_>>()
-            .join(&format!("{}", "┼".with(self.color_theme.table_border)));
+            .join(&format!("{}", "+".with(self.color_theme.table_border)));
         let separator = format!("{border}{separator}{border}");
 
         let mut output = String::new();
@@ -545,7 +545,7 @@ impl TerminalRenderer {
     }
 
     fn render_table_row(&self, row: &[String], widths: &[usize], is_header: bool) -> String {
-        let border = format!("{}", "│".with(self.color_theme.table_border));
+        let border = format!("{}", "|".with(self.color_theme.table_border));
         let mut line = String::new();
         line.push_str(&border);
 
@@ -702,7 +702,7 @@ mod tests {
             .render_markdown("# Heading\n\nThis is **bold** and *italic*.\n\n- item\n\n`code`");
 
         assert!(markdown_output.contains("Heading"));
-        assert!(markdown_output.contains("• item"));
+        assert!(markdown_output.contains("- item"));
         assert!(markdown_output.contains("code"));
         assert!(markdown_output.contains('\u{1b}'));
     }
@@ -725,7 +725,7 @@ mod tests {
             terminal_renderer.markdown_to_ansi("```rust\nfn hi() { println!(\"hi\"); }\n```");
         let plain_text = strip_ansi(&markdown_output);
 
-        assert!(plain_text.contains("╭─ rust"));
+        assert!(plain_text.contains("+-- rust"));
         assert!(plain_text.contains("fn hi"));
         assert!(markdown_output.contains('\u{1b}'));
         assert!(markdown_output.contains("[48;5;236m"));
@@ -740,8 +740,8 @@ mod tests {
 
         assert!(plain_text.contains("1. first"));
         assert!(plain_text.contains("2. second"));
-        assert!(plain_text.contains("  • nested"));
-        assert!(plain_text.contains("  • child"));
+        assert!(plain_text.contains("  - nested"));
+        assert!(plain_text.contains("  - child"));
     }
 
     #[test]
@@ -752,10 +752,10 @@ mod tests {
         let plain_text = strip_ansi(&markdown_output);
         let lines = plain_text.lines().collect::<Vec<_>>();
 
-        assert_eq!(lines[0], "│ Name  │ Value │");
-        assert_eq!(lines[1], "│───────┼───────│");
-        assert_eq!(lines[2], "│ alpha │ 1     │");
-        assert_eq!(lines[3], "│ beta  │ 22    │");
+        assert_eq!(lines[0], "| Name  | Value |");
+        assert_eq!(lines[1], "|-------+-------|");
+        assert_eq!(lines[2], "| alpha | 1     |");
+        assert_eq!(lines[3], "| beta  | 22    |");
         assert!(markdown_output.contains('\u{1b}'));
     }
 
