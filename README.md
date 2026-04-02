@@ -6,7 +6,7 @@
 
 - ✅ **本地模型支持** - 完全支持 LM Studio、Ollama 等本地模型服务
 - ✅ **无编码问题** - 修复所有终端乱码问题，使用 ASCII 字符确保兼容性  
-- ✅ **快速部署** - 一键安装，无需复杂配置
+- ✅ **快速部署** - 一键构建，无需复杂配置
 - ✅ **完整功能** - 保留所有原有功能（工具调用、流式响应、会话管理等）
 - ✅ **离线可用** - 完全离线环境下即可使用所有功能
 
@@ -33,25 +33,25 @@
 - 修改 `rust/crates/api/src/providers/mod.rs` - 认证优先级
 - 修改 `rust/crates/tools/src/lib.rs` - 工具 schema
 
-## 📦 安装使用
+## 📦 构建安装
 
-### 直接下载
+### 从源代码构建
 ```bash
-wget https://github.com/[YOUR_USERNAME]/claw-code-cn/releases/download/v0.1.0/claw-code-0.1.0-linux-x86_64.tar.gz
-tar -xzf claw-code-0.1.0-linux-x86_64.tar.gz
-cd claw-code-0.1.0-linux-x86_64
-./install.sh
+# 克隆仓库
+git clone https://github.com/cbwgij1988/claw-code-cn.git
+cd claw-code-cn
+
+# 构建项目
+cd rust
+cargo build --release
+
+# 主程序位于
+./target/release/claw
 ```
 
-### 本地模型配置
-```bash
-# LM Studio
-export OPENAI_API_KEY="local-model"
-export OPENAI_BASE_URL="http://localhost:1234/v1"
-
-# 启动本地模型模式
-./claw-local.sh --model qwen3.5-122b-a10b -p "你好"
-```
+### 依赖要求
+- Rust 1.70+
+- Cargo
 
 ## 🎯 支持的本地模型服务
 

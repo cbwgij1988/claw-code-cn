@@ -1,7 +1,25 @@
-__pycache__/
-archive/
-.omx/
-.clawd-agents/
-# Claude Code local artifacts
-.claude/settings.local.json
-.claude/sessions/
+# .gitignore for Claw Code CN Source Repository
+
+# Build artifacts
+/target/
+Cargo.lock
+
+# Distribution files
+/dist/
+*.tar.gz
+*.sha256
+
+# Session data
+/.claw/sessions/
+
+# Test binaries
+test_*
+
+# Local configuration
+.claw.json
+
+# Temporary files
+*.swp
+*.tmp
+.DS_Store
+Thumbs.db
