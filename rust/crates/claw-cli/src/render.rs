@@ -50,7 +50,7 @@ pub struct Spinner {
 }
 
 impl Spinner {
-    const FRAMES: [&str; 10] = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+    const FRAMES: [&str; 4] = ["/", "-", "\\", "|"];
 
     #[must_use]
     pub fn new() -> Self {

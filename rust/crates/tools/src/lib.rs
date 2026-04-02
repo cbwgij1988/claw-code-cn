@@ -498,6 +498,7 @@ pub fn mvp_tool_specs() -> Vec<ToolSpec> {
             description: "Return structured output in the requested format.",
             input_schema: json!({
                 "type": "object",
+                "properties": {},
                 "additionalProperties": true
             }),
             required_permission: PermissionMode::ReadOnly,
@@ -1220,7 +1221,7 @@ fn preview_text(input: &str, max_chars: usize) -> String {
         return input.to_string();
     }
     let shortened = input.chars().take(max_chars).collect::<String>();
-    format!("{}…", shortened.trim_end())
+    format!("{}â€¦", shortened.trim_end())
 }
 
 fn extract_search_hits(html: &str) -> Vec<SearchHit> {

@@ -1,0 +1,8 @@
+{
+  "api": {
+    "base_url": "http://localhost:1234/v1",
+    "api_key": "local-model"
+  },
+  "model": "gpt-3.5-turbo",
+  "permission_mode": "workspace-write"
+}
